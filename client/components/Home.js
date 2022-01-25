@@ -1,8 +1,7 @@
 import React, {useState} from 'react'
 import {connect} from 'react-redux'
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
-import { render } from 'enzyme';
-
+import StateForm from './stateForm'
 
 /**
  * COMPONENT
@@ -16,6 +15,8 @@ export class Home extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      selectedParks: [],
+      randomParkDisplay: [],
       parks: [],
     }
 
@@ -30,17 +31,19 @@ export class Home extends React.Component {
   async componentDidMount() {
     const apiKey = 'Er1RUGUH01srZtUNWR7TXeOHxBSMOCKmXaKNLcOQ'
       //fetch default parks
-      const response = await fetch(`https://developer.nps.gov/api/v1/parks?api_key=${apiKey}&limit=400`)
-      const  {data: npsData} = await response.json()
-      console.log('didmount', npsData)
-      this.setState({parks: npsData })
-          // const newArray = []
-          // for(let i = 0; i < 4; i++) {
-          //     newArray.push(json.data[Math.floor(Math.random()*json.data.length)])
-          // }
-          // this.setState({
-          // defaultParks: newArray,
-          // })
+      const response = await fetch(`https://developer.nps.gov/api/v1/parks?api_key=${apiKey}&limit=465`);
+      const  {data: npsData} = await response.json();
+      console.log('didmount', npsData);
+      const newArray = []
+      for(let i = 0; i < 4; i++) {
+        newArray.push(npsData[Math.floor(Math.random()*npsData.length)])
+      };
+      this.setState({
+        randomParkDisplay: newArray,
+      parks: npsData
+      })
+      // this.setState({parks: npsData })
+         
 
       
   }
@@ -80,16 +83,24 @@ export class Home extends React.Component {
       },
       locationfound(e) {
         setPosition(e.latlng)
-        map.flyTo(e.latlng, map.getZoom())
+        map.flyTo(e.latlng, 6)
       },
     })
+    const personIcon = L.icon({
+      iconUrl: 'person-Icon.png',
+      iconSize: [50, 32], //numbers for a proportional size
+      iconAnchor: [25, 16], //center with these numbers
+     
+    });
 
     return position === null ? null : (
-      <Marker position={position}>
+      <Marker position={position} icon={personIcon} style="hieght:10px; width:10px;">
         <Popup>You are here</Popup>
       </Marker>
     )
   }
+
+
 
   // ParkLocationsMarker = (parks) => {
   //   if(parks == []) {
@@ -122,6 +133,9 @@ export class Home extends React.Component {
   render() {
     const {username} = this.props
     const parks = this.state.parks
+    const parksDisplay = this.state.randomParkDisplay
+
+ 
     console.log('sttateeeee', this.state)
     console.log('rendering', parks)
     parks === [] ? console.log('sorry') : console.log('aprks.length',parks.length)
@@ -144,9 +158,10 @@ export class Home extends React.Component {
         </div>
         <div>
           {
-            parks !== [] ? <p className="text">Parks are a go!</p> : <em className="text">no parks found</em>
+            parks !== [] ? <StateForm /> : <em className="text">no parks found</em>
           }
         </div>
+
         <div id="map">
           <MapContainer center={[51.505, -0.09]} zoom={4} style={{ height: "100vh", width: "100%" }} scrollWheelZoom={false}>
             <TileLayer
@@ -156,18 +171,35 @@ export class Home extends React.Component {
             <this.LocationMarker />
             {
               parks.map(park => { 
-                const {latitude, longitude, fullName, states, url} = park;
+                const {latitude, longitude, fullName, states, url, images} = park;
                 return(
                 <Marker position={[latitude, longitude]} key={park.id} >
-                  <Popup>
-                    {fullName} <br /> {states} <br/ > {url}
+                  <Popup  className="popupContainer">
+                    <img src={images[0].url} /> <br />{fullName} <br /> {states} <br/ > <a href={url} >Park Website</a>
                   </Popup>
                 </Marker>)
               })
             }
           </MapContainer>
         </div>
-        <div className="text">hellllllloooooo</div>
+        <br />
+        <div id="title" className="text">Check out these fun NationalParks!</div>
+        <br />
+        <div className="parksDisplayContainer">
+          {
+            parksDisplay === [] ? <h2>no displayed parks</h2> :
+            parksDisplay.map(park => 
+              <div className="parkDisplay" key={park.id}>
+                <img src={park.images[0].url} />
+                <h3>{park.fullName}</h3>
+                <h3>{park.states}</h3>
+                <p>{park.description}</p>
+              </div>
+              )
+          }
+        </div>
+        <br />
+        <footer>technologies/libraries used: Leaflet, React-Leaflet, React</footer>
       </>
     );
   }

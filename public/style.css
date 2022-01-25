@@ -17,13 +17,65 @@ nav a {
   
 }
 
+
+footer {
+  color: #03e9f4;
+  background-color: forestgreen;
+  padding-top: 20px;
+  display: flex;
+  width: 100%;
+  
+}
+
 /* form div {
   margin: 1em;
   display: inline-block;
 } */
+.navLinks {
+  background-color: rgba(240, 240, 30, 0.651);
+}
+
 .text{
   color: #ffc64de5;
 }
+/* 
+.popupContainer {
+  width: 100px;
+  height: 100px;
+} */
+
+.popupContainer img {
+  height: auto;
+  width: 150px;
+}
+
+.parksDisplayContainer {
+  margin: auto;
+  width: 50%;
+  border: 3px solid green;
+  padding: 7px;
+  display: flex;
+  gap: 10px;
+}
+
+.parkDisplay {
+  /* width: 25%; */
+  background-color: cornsilk;
+  padding: 4px;
+}
+
+.parksDisplayContainer img {
+height: auto;
+width: 200px;
+}
+
+#title {
+  margin: auto;
+  width: 50%;
+  padding: 7px;
+  text-align: center;
+}
+
 
 h3 span{
   font-size: 10px;
