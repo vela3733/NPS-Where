@@ -53,7 +53,6 @@ class StateForm extends React.Component {
                             ))
                         }
                     </select>
-                    <input type="submit" value="Submit" />
 
                 </form>
         

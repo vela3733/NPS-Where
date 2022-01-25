@@ -3,12 +3,7 @@ import {connect} from 'react-redux'
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
 import StateForm from './stateForm'
 
-/**
- * COMPONENT
- * 
- */
-//my NPS api key
- //const apiKey = Er1RUGUH01srZtUNWR7TXeOHxBSMOCKmXaKNLcOQ
+
 
 
 export class Home extends React.Component {
@@ -19,14 +14,8 @@ export class Home extends React.Component {
       randomParkDisplay: [],
       parks: [],
     }
-
     this.LocationMarker = this.LocationMarker.bind(this)
-    // this.ParkLocationsMarker = this.ParkLocationsMarker.bind(this)
-
   }
-
-  
-  
 
   async componentDidMount() {
     const apiKey = 'Er1RUGUH01srZtUNWR7TXeOHxBSMOCKmXaKNLcOQ'
@@ -40,39 +29,9 @@ export class Home extends React.Component {
       };
       this.setState({
         randomParkDisplay: newArray,
-      parks: npsData
-      })
-      // this.setState({parks: npsData })
-         
-
-      
+        parks: npsData
+      }) 
   }
-
-  // const [hikingData, setHikingData] = useState(0);
-
-
-  // const myHeaders = new Headers();
-  // myHeaders.append("Content-Type", "application/json");
-
-  // const requestOptions = {
-  //   method: 'GET',
-  //   headers: myHeaders,
-  //   redirect: 'follow'
-  // };
-
-  // fetch("https://www.benbrougher.tech/hiker/v1/trails/", requestOptions)
-  // .then(response => response.text())
-  // .then(result => console.log(result))
-  // .catch(error => console.log('error', error));
-
-
-
-    // const api_url = 'https://www.benbrougher.tech/hiker/v1/trails/' ;
-    // const response = await fetch(api_url, requestOptions);
-    // const json = await response.json();
-    // console.log(json)
-
-
 
 
   LocationMarker = () => {
@@ -101,65 +60,31 @@ export class Home extends React.Component {
   }
 
 
-
-  // ParkLocationsMarker = (parks) => {
-  //   if(parks == []) {
-  //     return (<div>no parks!</div>)
-  //   } else {
-  //     const parkPositions = parks.map(park => { 
-  //       const {latitude, longitude} = park;
-  //       return parks === null ? null : (
-  //       <Marker position={[latitude, longitude]} >
-  //         <Popup>
-  //           I.m a park. <br /> Easily customizable.
-  //         </Popup>
-  //       </Marker>
-      
-  //   )})}
-
-
-  //     // <Marker position={[latitude, longitude]} >
-  //     //   <Popup>
-  //     //     I.m a park. <br /> Easily customizable.
-  //     //   </Popup>
-  //     // </Marker>
-    
-  // }
-
-
-
-
-  
   render() {
     const {username} = this.props
     const parks = this.state.parks
     const parksDisplay = this.state.randomParkDisplay
 
- 
     console.log('sttateeeee', this.state)
     console.log('rendering', parks)
     parks === [] ? console.log('sorry') : console.log('aprks.length',parks.length)
-    // console.log(Parks)
+
     return (
       <>
         <div className="text" align="center">
           {
-            username ?  
-            <h3>Huzzzah! to you, {username}</h3> : <h4>Hiya! Signup or login to save your most rad spots.</h4>
-
+            username ?  <div><h3>Huzzzah! {username}.</h3><h4>Let's find your next adventure</h4></div> : <h4>Hiya! Signup or login to save your most rad spots.</h4>
           }
         </div>
-        <div className="text">  
-        <h3>Where art thou?<span>(click anywhere in the map. Have a few deep blinks. and....)</span></h3>
-        <p>
-          latitude: <span id="lat"></span>°<br />
-          longitude: <span id="long"></span>°<br />
-        </p>
+        <div className="text" align="center">  
+          <h3>first we ask, 'hmm where are you?'<span>(click anywhere in the map and let's see.)</span></h3>
+          <p>
+            latitude: <span id="lat"></span>°<br />
+            longitude: <span id="long"></span>°<br />
+          </p>
         </div>
         <div>
-          {
-            parks !== [] ? <StateForm /> : <em className="text">no parks found</em>
-          }
+          <StateForm /> 
         </div>
 
         <div id="map">
@@ -173,11 +98,12 @@ export class Home extends React.Component {
               parks.map(park => { 
                 const {latitude, longitude, fullName, states, url, images} = park;
                 return(
-                <Marker position={[latitude, longitude]} key={park.id} >
-                  <Popup  className="popupContainer">
-                    <img src={images[0].url} /> <br />{fullName} <br /> {states} <br/ > <a href={url} >Park Website</a>
-                  </Popup>
-                </Marker>)
+                  <Marker position={[latitude, longitude]} key={park.id} >
+                    <Popup  className="popupContainer">
+                      <img src={images[0].url} /> <br />{fullName} <br /> {states} <br/ > <a href={url} >Park Website</a>
+                    </Popup>
+                  </Marker>
+                )
               })
             }
           </MapContainer>
